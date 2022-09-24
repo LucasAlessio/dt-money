@@ -13,6 +13,7 @@
 		"@types/react-dom": "^17.0.9",
 		"@types/yup": "^0.32.0",
 		"axios": "^0.27.2",
+		"bignumber.js": "^9.1.0",
 		"miragejs": "^0.1.45",
 		"polished": "^4.2.2",
 		"react": "^17.0.2",
@@ -52,6 +53,7 @@
 		]
 	},
 	"devDependencies": {
+		"@types/bignumber.js": "^5.0.0",
 		"@types/react-modal": "^3.13.1",
 		"@types/styled-components": "^5.1.26"
 	}

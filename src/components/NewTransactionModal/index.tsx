@@ -8,11 +8,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { useIsMutating } from "react-query";
 import { NumberFormatBase, NumberFormatBaseProps } from "react-number-format";
+import BigNumber from "bignumber.js";
 
 import closeImg from '../../assets/close.svg';
 import incomeImg from '../../assets/income.svg';
 import outcomeImg from '../../assets/outcome.svg';
-
 
 type NewTransactionModalProps = {
 	isOpen: boolean
@@ -168,13 +168,25 @@ function CurrencyInput(props: Omit<NumberFormatBaseProps, "format" | "getCaretBo
 	const format = (value: string) => {
 		if (!Number(value)) return "";
 
-		const amount = new Intl.NumberFormat("pt-BR", {
-			style: "decimal",
-			currency: "BRL",
-			minimumFractionDigits: 2,
-		}).format(parseFloat(value) / 100);
-	
-		return `${amount}`;
+		if (value.length > 15) {
+			value = value.substring(0, 15);
+		}
+
+		const fmt = {
+			prefix: '',
+			decimalSeparator: ',',
+			groupSeparator: '.',
+			groupSize: 3,
+			secondaryGroupSize: 0,
+			fractionGroupSeparator: ' ',
+			fractionGroupSize: 0,
+			suffix: ''
+		}
+
+		BigNumber.config({ FORMAT: fmt })
+		const Big = new BigNumber(value);
+
+		return Big.dividedBy(100).toFormat(2);
 	};
 
 	const getCaretBoundary = (value: string): boolean[] => {
@@ -184,7 +196,7 @@ function CurrencyInput(props: Omit<NumberFormatBaseProps, "format" | "getCaretBo
 	}
 
 	const removeFormatting = (inputValue: string)  => {
-		return Number(inputValue.replaceAll(".", "").replace(",", "")).toString();
+		return inputValue.replaceAll(".", "").replace(",", "");
 	}
 
 	return <NumberFormatBase
