@@ -107,14 +107,14 @@ function ModalFormContent({ onRequestClose }: { onRequestClose: NewTransactionMo
 			<Controller
 				control={control}
 				name="amount"
-				render={({ field: { onChange, name, value } }) => (
+				render={ ({ field: { onChange, name, value } }) => (
 					<CurrencyInput
 						name={name}
-						value={value}
+						value={value ?? ""}
 						onChange={onChange}
 						placeholder="Valor"
 						className={errors.amount ? 'has-error' : ''} />
-				)}
+				) }
 			/>
 			<HelpBlockError input="amount" />
 
@@ -183,10 +183,9 @@ function CurrencyInput(props: Omit<NumberFormatBaseProps, "format" | "getCaretBo
 			suffix: ''
 		}
 
-		BigNumber.config({ FORMAT: fmt })
 		const Big = new BigNumber(value);
 
-		return Big.dividedBy(100).toFormat(2);
+		return Big.dividedBy(100).toFormat(fmt);
 	};
 
 	const getCaretBoundary = (value: string): boolean[] => {
