@@ -1,10 +1,12 @@
-export type TransactionsList = {
+export type Transaction = {
 	id: number,
 	title: string,
 	amount: number,
 	type: "deposit" | "withdraw",
 	category: string,
 	createdAt: Date,
-}[];
+}
 
-export type TransactionForm = Omit<TransactionsList[0], 'id' | 'createdAt'>;
+export type TransactionsList = Transaction[];
+
+export type TransactionForm = Partial<{ id: number, createdAt: Date }> & Omit<Transaction, 'id' | 'createdAt'>;

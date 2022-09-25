@@ -1,7 +1,11 @@
 import { useTransactions } from "../../hooks/useTransactions";
 import { Container } from "./styles";
 
-export function TransactionsTable() {
+type TransactionsTableProps = {
+	onOpenUpdateTransactionModal: (transactionId: number) => void,
+}
+
+export function TransactionsTable({ onOpenUpdateTransactionModal }: TransactionsTableProps) {
 	const { result: { data, isFetching, error } } = useTransactions();
 
 	return (
@@ -19,7 +23,7 @@ export function TransactionsTable() {
 				<tbody>
 					{ (data?.transactions || []).length > 0 ? (
 						data?.transactions.map(transaction => (
-							<tr key={ transaction.id } role="button">
+							<tr key={ transaction.id } role="button" onClick={ () => onOpenUpdateTransactionModal(transaction.id) }>
 								<td>{ transaction.title }</td>
 								<td className={ transaction.type }>
 									{ transaction.type === 'withdraw' ? '-' : ''}

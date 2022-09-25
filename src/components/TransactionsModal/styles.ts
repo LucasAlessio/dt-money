@@ -2,11 +2,15 @@ import { darken, lighten } from "polished";
 import curriedTransparentize from "polished/lib/color/transparentize";
 import styled from "styled-components";
 
-export const Container = styled.form`
+export const Container = styled.div`
 	h2 {
 		color: var(--text-title);
 		font-size: 1.5rem;
 		margin-bottom: 2rem;
+	}
+
+	p {
+		color: var(--text-body);
 	}
 
 	input {
@@ -60,6 +64,30 @@ export const Container = styled.form`
 		color: var(--red);
 
 		font-size: 0.875rem;
+	}
+
+	hr {
+		border: 0;
+		border-top: 1px solid #d7d7d7;
+		margin: 2rem 0;
+	}
+
+	button.btn-danger {
+		width: 100%;
+		height: 4rem;
+		padding: 0 1.5rem;
+		background: ${ lighten(0.1, '#e52e4d') };
+		color: var(--shape);
+		border-radius: 0.25rem;
+		border: 0;
+		font-size: 1rem;
+		font-weight: 600;
+
+		transition: filter 0.2s;
+
+		&:hover {
+			filter: brightness(0.9);
+		}
 	}
 `;
 
@@ -116,4 +144,4 @@ export const RadioBox = styled.button<RadioBoxProps>`
 		font-size: 1rem;
 		color: var(--text-title);
 	}
-`
+`;
