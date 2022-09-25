@@ -11,7 +11,12 @@ type TContext = {
 	}
 };
 
-export type TransactionsApiFunction = UseMutateAsyncFunction<Record<'transaction', Transaction>, Error, TransactionForm, TContext>;
+type TVariables = {
+	id?: number,
+	transaction: TransactionForm,
+}
+
+export type TransactionsApiFunction = UseMutateAsyncFunction<Record<'transaction', Transaction>, Error, TVariables, TContext>;
 
 type TransactionsContextData = {
 	result: QueryResult,
@@ -35,7 +40,7 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
 		}
 	});
 
-	const { mutateAsync: createTransaction } = useMutation<Record<'transaction', Transaction>, Error, TransactionForm, TContext>(async (newTransaction) => {
+	const { mutateAsync: createTransaction } = useMutation<Record<'transaction', Transaction>, Error, TVariables, TContext>(async ({ transaction: newTransaction }) => {
 		const { data } = await api.post("transactions", {
 			...(newTransaction),
 			// Converte do formato 123.456,78 para 123456.78
@@ -77,8 +82,8 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
 		},
 	});
 
-	const { mutateAsync: updateTransaction } = useMutation<Record<'transaction', Transaction>, Error, TransactionForm, TContext>(async (transaction) => {
-		const { data } = await api.put(`transactions/${transaction.id ?? 0}`, {
+	const { mutateAsync: updateTransaction } = useMutation<Record<'transaction', Transaction>, Error, TVariables, TContext>(async ({ id, transaction }) => {
+		const { data } = await api.put(`transactions/${id}`, {
 			...(transaction),
 			// Converte do formato 123.456,78 para 123456.78
 			amount: Number(transaction.amount.toString().replaceAll(".", "").replace(",", ".")),

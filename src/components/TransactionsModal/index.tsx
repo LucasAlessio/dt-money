@@ -21,6 +21,8 @@ type TransactionModalProps = {
 }
 
 type ModalFromContentProps = {
+	type: "create" | "update",
+	transactionId?: number,
 	onRequestClose: TransactionModalProps["onRequestClose"],
 	onRequestSubmit: TransactionsApiFunction,
 }
@@ -75,7 +77,7 @@ export function NewTransactionModal(props: TransactionModalProps) {
 
 			<FormProvider {...form}>
 				<Container>
-					<ModalFormContent onRequestSubmit={createTransaction} {...props} />
+					<ModalFormContent type="create" onRequestSubmit={createTransaction} {...props} />
 				</Container>
 			</FormProvider>
 		</ReactModal>
@@ -162,11 +164,11 @@ export function UpdateTransactionModal(props: TransactionModalProps & Record<"tr
 			<FormProvider {...form}>
 				<Container>
 					{ isFetching && <>
-						<h2>Alterar dados</h2>
+						<h2>Editar transação</h2>
 						<p>Carregando informações...</p>
 					</> }
 					{ !isFetching && !error && <>
-						<ModalFormContent onRequestSubmit={updateTransaction} {...props} />
+						<ModalFormContent type="update" onRequestSubmit={updateTransaction} {...props} />
 						<hr />
 						<button className="btn-danger" onClick={handleDeleteTransaction} disabled={isMutating}>
 							{ isMutating ? 'Excluindo...' : 'Excluir transação' }
@@ -178,7 +180,7 @@ export function UpdateTransactionModal(props: TransactionModalProps & Record<"tr
 	);
 }
 
-function ModalFormContent({ onRequestClose, onRequestSubmit }: ModalFromContentProps) {
+function ModalFormContent({ type, transactionId, onRequestClose, onRequestSubmit }: ModalFromContentProps) {
 	const { register, setValue, watch, handleSubmit, reset, formState: { errors }, control } = useFormContext<TransactionForm>()
 
 	const isMutating = useIsMutating({
@@ -189,7 +191,7 @@ function ModalFormContent({ onRequestClose, onRequestSubmit }: ModalFromContentP
 		event.preventDefault();
 
 		handleSubmit(async (r: TransactionForm) => {
-			await onRequestSubmit(r);
+			await onRequestSubmit({ id: transactionId, transaction: r });
 			onRequestClose();
 			reset();
 		} , (e) => null)();
@@ -197,7 +199,7 @@ function ModalFormContent({ onRequestClose, onRequestSubmit }: ModalFromContentP
 
 	return (
 		<>
-			<h2>Alterar dados</h2>
+			{ type === "create" ? <h2>Cadastrar transação</h2> : <h2>Editar transação</h2> }
 
 			<form onSubmit={handleCreateNewTransaction}>
 				<input
@@ -254,7 +256,7 @@ function ModalFormContent({ onRequestClose, onRequestSubmit }: ModalFromContentP
 					className={errors.category ? 'has-error' : ''} />
 				<HelpBlockError input="category" />
 
-				<button type="submit" disabled={isMutating}>{ isMutating ? 'Salvando...' : 'Cadastrar' }</button>
+				<button type="submit" disabled={isMutating}>{ isMutating ? 'Salvando...' : ( type === 'create' ? 'Cadastrar' : "Salvar" ) }</button>
 			</form>
 		</>
 	);

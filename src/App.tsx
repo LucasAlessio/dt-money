@@ -74,18 +74,6 @@ createServer({
 		});
 
 		this.delete('/transactions/:id', (schema, { params: { id }, requestBody }) => {
-			// const transaction = schema.findBy('transaction', { id: id });
-
-			// if (!transaction) {
-			// 	return new Response(404, {
-			// 	 	some: 'header',
-			// 	}, {
-			// 	 	errors: ['Transação não encontrada'],
-			// 	});
-			// }
-
-			// transaction.update(data);
-			// return transaction;
 			const transaction = schema.findBy('transaction', { id: id });
 
 			if (!transaction) {
