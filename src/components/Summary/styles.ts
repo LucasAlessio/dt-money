@@ -23,7 +23,7 @@ export const Container = styled.div`
 			justify-content: space-between;
 		}
 
-		strong {
+		strong, .loader-icon {
 			display: block;
 			margin-top: 1rem;
 			font-size: 2rem;

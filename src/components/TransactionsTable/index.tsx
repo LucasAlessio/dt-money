@@ -1,3 +1,5 @@
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTransactions } from "../../hooks/useTransactions";
 import { Container } from "./styles";
 
@@ -42,7 +44,7 @@ export function TransactionsTable({ onOpenUpdateTransactionModal }: Transactions
 						<>
 							{ isFetching && (
 								<tr className="line-muted loading">
-									<td colSpan={4}>Buscando informações...</td>
+									<td colSpan={4}><FontAwesomeIcon icon={faSpinner} pulse /> Buscando informações</td>
 								</tr>
 							) }
 							{ error && (

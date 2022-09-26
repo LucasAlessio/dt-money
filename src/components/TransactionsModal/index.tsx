@@ -9,11 +9,13 @@ import * as yup from "yup";
 import { useIsMutating, useQuery } from "react-query";
 import { NumberFormatBase, NumberFormatBaseProps } from "react-number-format";
 import BigNumber from "bignumber.js";
+import { api } from "../../services/api";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faExclamationTriangle, faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 import closeImg from '../../assets/close.svg';
 import incomeImg from '../../assets/income.svg';
 import outcomeImg from '../../assets/outcome.svg';
-import { api } from "../../services/api";
 
 type TransactionModalProps = {
 	isOpen: boolean
@@ -165,13 +167,17 @@ export function UpdateTransactionModal(props: TransactionModalProps & Record<"tr
 				<Container>
 					{ isFetching && <>
 						<h2>Editar transação</h2>
-						<p>Carregando informações...</p>
+						<p><FontAwesomeIcon icon={faSpinner} pulse /> Carregando informações</p>
 					</> }
 					{ !isFetching && !error && <>
 						<ModalFormContent type="update" onRequestSubmit={updateTransaction} {...props} />
 						<hr />
 						<button className="btn-danger" onClick={handleDeleteTransaction} disabled={isMutating}>
-							{ isMutating ? 'Excluindo...' : 'Excluir transação' }
+							{ isMutating ? (
+								<>
+									<FontAwesomeIcon icon={faSpinner} pulse /> Excluindo
+								</>
+							) : 'Excluir transação' }
 						</button>
 					</> }
 				</Container>
@@ -256,7 +262,13 @@ function ModalFormContent({ type, transactionId, onRequestClose, onRequestSubmit
 					className={errors.category ? 'has-error' : ''} />
 				<HelpBlockError input="category" />
 
-				<button type="submit" disabled={isMutating}>{ isMutating ? 'Salvando...' : ( type === 'create' ? 'Cadastrar' : "Salvar" ) }</button>
+				<button type="submit" disabled={isMutating}>
+					{ isMutating ? (
+						<>
+							<FontAwesomeIcon icon={faSpinner} pulse /> Salvando
+						</>
+					) : ( type === 'create' ? 'Cadastrar' : "Salvar" ) }
+				</button>
 			</form>
 		</>
 	);
@@ -266,7 +278,7 @@ function HelpBlockError({ input }: { input: keyof TransactionForm }) {
 	const { formState: { errors } } = useFormContext<TransactionForm>();
 
 	return <>
-		{ errors[input] && <span className="error">{ errors[input]?.message }</span> }
+		{ errors[input] && <span className="error"><FontAwesomeIcon icon={faExclamationTriangle} /> { errors[input]?.message }</span> }
 	</>
 }
 

@@ -1,5 +1,7 @@
 import { Container } from "./styles";
 import { useTransactions } from "../../hooks/useTransactions";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 import incomeImg from '../../assets/income.svg';
 import outcomeImg from '../../assets/outcome.svg';
@@ -28,7 +30,7 @@ export function Summary() {
 					<img src={ incomeImg } alt="Entradas" />
 				</header>
 				{ isLoading ? (
-					<span>Carregando...</span>
+					<span className="loader-icon"><FontAwesomeIcon icon={faSpinner} pulse /></span>
 				) : (
 					!error && <strong>
 						{ Intl.NumberFormat('pt-BR', {
@@ -45,7 +47,7 @@ export function Summary() {
 					<img src={ outcomeImg } alt="Saídas" /> 
 				</header>
 				{ isLoading ? (
-					<span>Carregando...</span>
+					<span className="loader-icon"><FontAwesomeIcon icon={faSpinner} pulse /></span>
 				) : (
 					!error && <strong>
 						- { Intl.NumberFormat('pt-BR', {
@@ -62,7 +64,7 @@ export function Summary() {
 					<img src={ totalImg } alt="Total" /> 
 				</header>
 				{ isLoading ? (
-					<span>Carregando...</span>
+					<span className="loader-icon"><FontAwesomeIcon icon={faSpinner} pulse /></span>
 				) : (
 					!error && <strong>
 						{ Intl.NumberFormat('pt-BR', {
